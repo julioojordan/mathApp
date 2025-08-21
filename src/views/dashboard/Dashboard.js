@@ -10,6 +10,7 @@ import {
 } from '@coreui/react'
 import { CChart } from '@coreui/react-chartjs'
 import { useNavigate } from 'react-router-dom'
+import services from "../../services";
 
 const Dashboard = () => {
   const navigate = useNavigate()
