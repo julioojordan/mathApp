@@ -4,7 +4,7 @@ const initialState = {
   exp: 0,
   current_streak: 0,
   best_streak: 0,
-  user_progress: [],
+  progress: 0,
 }
 
 const userReducer = (state = initialState, { type, payload }) => {

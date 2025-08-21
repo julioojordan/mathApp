@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { CButton, CCol, CContainer, CFormTextarea, CProgress, CRow, CImage } from '@coreui/react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import services from '../../services'
 import CIcon from '@coreui/icons-react'
 import { cilXCircle } from '@coreui/icons'
@@ -9,6 +9,7 @@ import { AchievementModal, ErrorModal, FeedbackAlert } from '../../components'
 
 const QuizPage = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const { id: lessonIdParam } = useParams()
   const lessonId = Number(lessonIdParam)
   const { user_id, exp, current_streak, best_streak } = useSelector((state) => state.user)
@@ -30,10 +31,10 @@ const QuizPage = () => {
   const [newTotalExp, setNewTotalExp] = useState(0)
   const [currentStreak, setCurrentStreak] = useState(0)
   const [bestStreak, setBestStreak] = useState(0)
+  const [isAlreadySubmit, setIsAlreadySubmit] = useState(false)
   const [progress, setProgress] = useState(0)
   const [attemptId, setAttemptId] = useState('')
 
-  //action and loading state
   const [checking, setChecking] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [actionError, setActionError] = useState(false)
@@ -42,7 +43,7 @@ const QuizPage = () => {
     async function fetchLesson() {
       try {
         setLoading(true)
-        const data = await services.LessonService.getLessonById(lessonId)
+        const data = await services.LessonService.getLessonById(lessonId, user_id)
         setLesson(data)
         const initialAnswers =
           data?.problems?.map((p) => ({
@@ -69,7 +70,6 @@ const QuizPage = () => {
   const currentProblem = problems[currentIndex]
   const progressBar = ((currentIndex + 1) / problems.length) * 100
 
-  // Handlers
   const handleOptionSelect = (optionId) => {
     if (checked) return
     const newAnswers = [...answers]
@@ -145,8 +145,14 @@ const QuizPage = () => {
         user_id,
       }
 
-      const { correct_count, earned_exp, new_total_xp, streak, lesson_progress } =
-        await services.LessonService.submit(lessonId, body, params)
+      const {
+        correct_count,
+        earned_exp,
+        new_total_xp,
+        streak,
+        lesson_progress,
+        is_already_submit,
+      } = await services.LessonService.submit(lessonId, body, params)
 
       setTotalCorrect(correct_count)
       setExpEarned(earned_exp)
@@ -154,6 +160,18 @@ const QuizPage = () => {
       setCurrentStreak(streak.current)
       setBestStreak(streak.best)
       setProgress(lesson_progress)
+      setIsAlreadySubmit(is_already_submit)
+
+      if (!is_already_submit) {
+        dispatch({
+          type: 'setUser',
+          payload: {
+            exp: new_total_xp,
+            current_streak: streak.current,
+            best_streak: streak.best,
+          },
+        })
+      }
 
       setShowModal(true)
     } catch (e) {
@@ -213,7 +231,7 @@ const QuizPage = () => {
 
   return (
     <div className="bg-body-tertiary min-vh-100 d-flex flex-column position-relative">
-      <CContainer className="pt-4 pb-5 flex-grow-1">
+      <CContainer className="pt-4 pb-5 flex-grow-1 mb-5">
         <CProgress animated color="info" value={progressBar} className="mb-4" />
         <h4 className="fw-bold text-primary mb-2">{lesson?.title}</h4>
         <h3 className="fw-bold mb-3">{displayQuestion}</h3>
@@ -288,9 +306,9 @@ const QuizPage = () => {
             className="px-5 py-2 fs-4 w-50"
             disabled={
               isMultiple
-                ? !answers[currentIndex] // butuh option_id
+                ? !answers[currentIndex]
                 : isText
-                  ? !String(answers[currentIndex] || '').trim() // butuh value string
+                  ? !String(answers[currentIndex] || '').trim() 
                   : true
             }
           >
@@ -313,6 +331,7 @@ const QuizPage = () => {
         navigate={navigate}
         totalCorrect={totalCorrect}
         problemsLength={problems.length}
+        isAlreadySubmit={isAlreadySubmit}
         expEarned={expEarned}
         newTotalExp={newTotalExp}
         currentStreak={currentStreak}

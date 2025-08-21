@@ -1,11 +1,5 @@
 import React from 'react'
-import {
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CButton
-} from '@coreui/react'
+import { CModal, CModalBody, CModalFooter, CModalHeader, CButton } from '@coreui/react'
 
 const AchievementModal = ({
   visible,
@@ -16,11 +10,14 @@ const AchievementModal = ({
   expEarned,
   newTotalExp,
   currentStreak,
-  bestStreak
+  bestStreak,
+  isAlreadySubmit,
 }) => {
   return (
     <CModal visible={visible} onClose={onClose} alignment="center">
-      <CModalHeader>🎉 Achievement Unlocked</CModalHeader>
+      <CModalHeader>
+        {isAlreadySubmit ? '📌 Lesson Already Submitted' : '🎉 Achievement Unlocked'}
+      </CModalHeader>
       <CModalBody className="text-center">
         <p className="fs-5">
           Correct Answers: <strong>{totalCorrect}</strong> / {problemsLength}
@@ -28,7 +25,7 @@ const AchievementModal = ({
         <p className="fs-5">
           EXP Earned: <strong>{expEarned}</strong>
         </p>
-        {newTotalExp > 0 && (
+        {newTotalExp > 0 && !isAlreadySubmit && (
           <p className="fs-5">
             New Total EXP: <strong>{newTotalExp}</strong>
           </p>
@@ -38,10 +35,13 @@ const AchievementModal = ({
         </p>
       </CModalBody>
       <CModalFooter className="justify-content-center">
-        <CButton color="primary" onClick={() => {
-          onClose()
-          navigate('/dashboard')
-        }}>
+        <CButton
+          color="primary"
+          onClick={() => {
+            onClose()
+            navigate('/dashboard')
+          }}
+        >
           Close
         </CButton>
       </CModalFooter>

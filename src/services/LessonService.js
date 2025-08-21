@@ -11,8 +11,8 @@ const getAllLesson = async (user_id) => {
   }
 }
 
-const getLessonById = async (lesson_id) => {
-  const url = `/api/lesson/${lesson_id}`
+const getLessonById = async (lesson_id, user_id) => {
+  const url = `/api/lesson/${lesson_id}?user_id=${user_id}`
   try {
     const response = await api.get(url)
     console.log(response.data)

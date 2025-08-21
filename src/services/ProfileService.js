@@ -1,6 +1,6 @@
 import api from "./Api";
 
-const getTotalAnggota = async (user_id) => {
+const getProfileById = async (user_id) => {
   const url = `/api/profile/${user_id}`;
   try {
     const response = await api.get(url);
@@ -13,5 +13,5 @@ const getTotalAnggota = async (user_id) => {
 
 
 export default {
-  getTotalAnggota
+  getProfileById
 };

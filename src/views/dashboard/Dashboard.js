@@ -11,13 +11,14 @@ import {
 } from '@coreui/react'
 import { CChart } from '@coreui/react-chartjs'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import services from '../../services'
 import CIcon from '@coreui/icons-react'
 import { cilXCircle, cilCheckCircle } from '@coreui/icons'
 
 const Dashboard = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const user_id = useSelector((state) => state.user?.user_id || 1)
 
   const [userInfo, setUserInfo] = useState(null)
@@ -30,16 +31,27 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const data = await services.ProfileService.getTotalAnggota(user_id)
+        const data = await services.ProfileService.getProfileById(user_id)
         setUserInfo(data)
         setProgress(Math.round(Number(data.progress_percentage)))
+        console.log(data)
+        dispatch({
+          type: 'setUser',
+          payload: {
+            name: data.name,
+            exp: data.exp,
+            current_streak: data.current_streak,
+            best_streak: data.best_streak,
+            user_progress: data.progress_percentage,
+          },
+        })
       } catch (err) {
         console.error('Error fetching user info:', err)
         setError(true)
       } finally {
         setTimeout(() => {
           setLoadingUser(false)
-        }, 1000) // 2000ms = 2 detik
+        }, 1000)
       }
     }
 
@@ -85,11 +97,11 @@ const Dashboard = () => {
                 <CRow className="align-items-center text-center">
                   <CCol xs={12} md={4}>
                     <h5>Current Streak</h5>
-                    <p className="fs-4 fw-bold text-primary">{userInfo.currentStreak ?? 0} days</p>
+                    <p className="fs-4 fw-bold text-primary">{userInfo.current_streak ?? 0}</p>
                   </CCol>
                   <CCol xs={12} md={4}>
                     <h5>Best Streak</h5>
-                    <p className="fs-4 fw-bold text-success">{userInfo.bestStreak ?? 0} days</p>
+                    <p className="fs-4 fw-bold text-success">{userInfo.best_streak ?? 0}</p>
                   </CCol>
                   <CCol xs={12} md={4}>
                     <h5>Progress</h5>
@@ -166,7 +178,10 @@ const Dashboard = () => {
 
             return (
               <CCol xs={12} sm={6} md={4} lg={4} key={lesson.id} className="mb-4">
-                <div onClick={() => navigate(`/lessons/${lesson.id}`)} style={{ cursor: 'pointer' }}>
+                <div
+                  onClick={() => navigate(`/lessons/${lesson.id}`)}
+                  style={{ cursor: 'pointer' }}
+                >
                   <CWidgetStatsB
                     className="mb-1"
                     progress={{ color, value: progressPercent }}
