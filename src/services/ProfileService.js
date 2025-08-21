@@ -1,10 +1,10 @@
 import api from "./Api";
 
-const getTotalAnggota = async (userId) => {
-  const url = `/api/profile/${userId}`;
+const getTotalAnggota = async (user_id) => {
+  const url = `/api/profile/${user_id}`;
   try {
     const response = await api.get(url);
-    return Promise.resolve(response.data.data);
+    return Promise.resolve(response.data.response);
   } catch (error) {
     console.error("Error:", error);
     return Promise.reject(error);
