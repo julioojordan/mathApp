@@ -16,6 +16,6 @@ ENV VITE_API_URL=$VITE_API_URL
 RUN yarn build
 
 CMD if [ "$NODE_ENV" = "development" ]; \
-    then yarn start; \
+    then yarn dev --host; \
     else serve -s dist -l 5000; \
     fi
