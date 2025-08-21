@@ -15,7 +15,6 @@ const getLessonById = async (lesson_id, user_id) => {
   const url = `/api/lesson/${lesson_id}?user_id=${user_id}`
   try {
     const response = await api.get(url)
-    console.log(response.data)
     return Promise.resolve(response.data.response)
   } catch (error) {
     console.error('Error:', error)
@@ -27,7 +26,6 @@ const checkLesson = async (lesson_id, body) => {
   const url = `/api/lesson/${lesson_id}/check`
   try {
     const response = await api.post(url, body)
-    console.log(response.data)
     return Promise.resolve(response.data)
   } catch (error) {
     console.error('Error:', error)
@@ -41,7 +39,6 @@ const submit = async (lesson_id, body, params) => {
 
   try {
     const response = await api.post(url, body)
-    console.log(response.data)
     return Promise.resolve(response.data.response)
   } catch (error) {
     console.error('Error:', error)

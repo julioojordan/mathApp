@@ -53,7 +53,6 @@ const QuizPage = () => {
 
         setAnswers(initialAnswers)
       } catch (err) {
-        console.log(err)
         if (err.name === 'AbortError') return
         setError(err?.message || 'Failed to load lesson')
       } finally {

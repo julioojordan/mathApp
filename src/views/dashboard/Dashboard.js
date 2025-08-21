@@ -34,7 +34,6 @@ const Dashboard = () => {
         const data = await services.ProfileService.getProfileById(user_id)
         setUserInfo(data)
         setProgress(Math.round(Number(data.progress_percentage)))
-        console.log(data)
         dispatch({
           type: 'setUser',
           payload: {

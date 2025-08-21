@@ -10,7 +10,6 @@ import './scss/examples.scss'
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
 const QuizPage = React.lazy(() => import('./views/pages/QuizPage'))
-const TestQuizPage = React.lazy(() => import('./views/pages/testQuizPage'))
 
 const App = () => {
   const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
@@ -40,7 +39,6 @@ const App = () => {
         }
       >
         <Routes>
-          <Route exact path="/lessonsTest" name="Quiz Page" element={<TestQuizPage />} />
           <Route exact path="/lessons/:id" name="Quiz Page" element={<QuizPage />} />
           <Route path="*" name="Home" element={<DefaultLayout />} />
         </Routes>
