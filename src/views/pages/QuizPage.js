@@ -1,12 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import {
-  CButton,
-  CCol,
-  CContainer,
-  CFormTextarea,
-  CProgress,
-  CRow
-} from '@coreui/react'
+import { CButton, CCol, CContainer, CFormTextarea, CProgress, CRow, CImage } from '@coreui/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import services from '../../services'
@@ -227,10 +220,11 @@ const QuizPage = () => {
 
         {displayImage && (
           <div className="mb-3 text-center">
-            <img
+            <CImage
               src={displayImage}
               alt={currentProblem?.meta?.alt || 'question image'}
-              style={{ maxWidth: '100%', borderRadius: '12px' }}
+              fluid
+              style={{ maxWidth: '50%', height: '50%', borderRadius: '12px' }}
             />
           </div>
         )}
