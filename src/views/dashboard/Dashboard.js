@@ -96,11 +96,11 @@ const Dashboard = () => {
                 <CRow className="align-items-center text-center">
                   <CCol xs={12} md={4}>
                     <h5>Current Streak</h5>
-                    <p className="fs-4 fw-bold text-primary">{userInfo.current_streak ?? 0}</p>
+                    <p className="fs-4 fw-bold text-primary">{userInfo.current_streak ?? 0} Days</p>
                   </CCol>
                   <CCol xs={12} md={4}>
                     <h5>Best Streak</h5>
-                    <p className="fs-4 fw-bold text-success">{userInfo.best_streak ?? 0}</p>
+                    <p className="fs-4 fw-bold text-success">{userInfo.best_streak ?? 0} Days</p>
                   </CCol>
                   <CCol xs={12} md={4}>
                     <h5>Progress</h5>
