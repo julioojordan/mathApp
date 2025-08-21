@@ -1,10 +1,10 @@
-
-import axios from "axios";
-// const apiUrl = window.env?.REACT_APP_API_URL || process.env.REACT_APP_API_URL;
+import axios from 'axios'
+const apiUrl = import.meta.env.VITE_API_URL
+console.log(apiUrl)
 
 const api = axios.create({
-  baseURL: "http://localhost:3001",
-});
+  baseURL: apiUrl || 'http://localhost:3001',
+})
 
 // Interceptor for adding header Authorization di setiap request but still dont use this
 // api.interceptors.request.use(
@@ -35,4 +35,4 @@ const api = axios.create({
 //   }
 // );
 
-export default api;
+export default api
